@@ -1,0 +1,54 @@
+version: "3.8"
+
+services:
+  chromadb:
+    build:
+      context: docker
+      dockerfile: Dockerfile.chromadb
+    ports:
+      - "8001:8000"
+    volumes:
+      - chromadb_data:/chroma
+    environment:
+      - ANONYMIZED_TELEMETRY=False
+
+  backend:
+    build:
+      context: backend
+    ports:
+      - "8000:8000"
+    depends_on:
+      - chromadb
+    environment:
+      - DEBUG=True
+      - LOG_LEVEL=DEBUG
+      - CHROMADB_HOST=chromadb
+      - CHROMADB_PORT=8000
+      - AWS_REGION=us-east-1
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - S3_BUCKET_NAME=personal-library-pdfs
+      - SQS_INDEXING_QUEUE_URL=${SQS_INDEXING_QUEUE_URL}
+    volumes:
+      - ./backend:/app
+
+  indexer:
+    build:
+      context: indexer
+    depends_on:
+      - chromadb
+    environment:
+      - DEBUG=False
+      - LOG_LEVEL=INFO
+      - CHROMADB_HOST=chromadb
+      - CHROMADB_PORT=8000
+      - AWS_REGION=us-east-1
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - S3_BUCKET=personal-library-pdfs
+      - SQS_QUEUE_URL=${SQS_INDEXING_QUEUE_URL}
+      - CHUNK_SIZE=1000
+      - CHUNK_OVERLAP=200
+
+volumes:
+  chromadb_data:

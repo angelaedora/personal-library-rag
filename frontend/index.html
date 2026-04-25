@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Library Assistant</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="header-content">
+                <h1>📚 Personal Library Assistant</h1>
+                <p class="subtitle">Upload your PDFs and ask questions</p>
+            </div>
+        </header>
+
+        <main class="main">
+            <!-- Upload Section -->
+            <section class="upload-section">
+                <div class="upload-box">
+                    <div id="dropZone" class="drop-zone">
+                        <div class="drop-icon">📄</div>
+                        <h3>Upload PDF Documents</h3>
+                        <p>Drag and drop your PDFs here or click to browse</p>
+                        <input type="file" id="fileInput" accept=".pdf" multiple style="display: none;">
+                    </div>
+                    <div id="uploadProgress" class="upload-progress" style="display: none;">
+                        <div class="progress-bar">
+                            <div id="progressFill" class="progress-fill"></div>
+                        </div>
+                        <p id="progressText">Uploading...</p>
+                    </div>
+                    <div id="uploadedFiles" class="uploaded-files"></div>
+                </div>
+            </section>
+
+            <!-- Chat Section -->
+            <section class="chat-section">
+                <div class="chat-container">
+                    <div id="chatMessages" class="chat-messages">
+                        <div class="message system">
+                            <p>Welcome! Upload documents and ask questions about them.</p>
+                        </div>
+                    </div>
+
+                    <div class="chat-input-area">
+                        <form id="chatForm" class="chat-form">
+                            <input
+                                type="text"
+                                id="queryInput"
+                                class="query-input"
+                                placeholder="Ask a question about your documents..."
+                                autocomplete="off"
+                            >
+                            <button type="submit" class="send-button" id="sendButton">
+                                Send
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Sources Sidebar -->
+                <aside class="sources-sidebar">
+                    <h3>Sources</h3>
+                    <div id="sourcesList" class="sources-list">
+                        <p class="no-sources">No sources yet</p>
+                    </div>
+                </aside>
+            </section>
+        </main>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
